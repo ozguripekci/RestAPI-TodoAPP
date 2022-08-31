@@ -3,6 +3,7 @@ from django.shortcuts import render
 from .models import Todo
 from .serializers import TodoSerializer
 from rest_framework import status
+from rest_framework.response import Response
 
 def home(request):
     return HttpResponse(
@@ -52,6 +53,34 @@ def todoListCreate(request):
     
     return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
     
-@api_view(['PUT'])
-def todoUpdate(request,pk):
-        queryset = Todo.objects.get(id=pk)
+@api_view(['GET','PUT', 'DELETE'])
+def todoUpdate(request, pk):
+    
+    querset =  Todo.objects.get(id = pk)
+    
+    if request.method == "GET":
+        serializer = TodoSerializer(querset)
+    
+        return Response(serializer.data)
+        
+    elif request.method == "PUT":
+        
+        serializer = TodoSerializer(instance=querset,  data = request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            
+        return Response(serializer.errors, status=status.HTTP_204_NO_CONTENT)
+    
+    elif request.method == "DELETE":
+      
+        querset.delete()
+        return Response("Item Deleted")
+
+@api_view(['DELETE'])
+def todoDelete(request, pk):
+    querset =  Todo.objects.get(id = pk)
+    if request.method == "DELETE":
+        querset.delete()
+        return Response("Item Deleted")
