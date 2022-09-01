@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 
+#pegination
+from .pagination import SmallPageNumberPegination, LargePageNumberPegination
+
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
@@ -171,11 +174,20 @@ class TodoMVS(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
 
+    #pegination
+    pagination_class = LargePageNumberPegination
+
+
+
     # filters
-    @action(methods=['GET'], detail=False)
+""" @action(methods=['GET'], detail=False)
     def todo_count(self, request):
         todo_count = Todo.objects.filter(done=False).count()
         count = {
             'undo-todos': todo_count
         }
-        return Response(count)
+        return Response(count) """
+
+
+# Pegination : verinin yavas yavas sayfaya yüklenmesi durumu.
+# Bu durum mesela, insta da asagi dogru cekerken yüklemesi...
