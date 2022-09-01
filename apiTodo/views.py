@@ -172,13 +172,10 @@ class TodoMVS(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
 
     # filters
-    @action(method=['GET'], detail=False)
+    @action(methods=['GET'], detail=False)
     def todo_count(self, request):
         todo_count = Todo.objects.filter(done=False).count()
         count = {
             'undo-todos': todo_count
         }
         return Response(count)
-        
-
-
