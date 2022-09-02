@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # third party apps
     "rest_framework",
     "django_filters",
+    'rest_framework.authtoken',
     # my apps
     "apiTodo",
 ]
@@ -152,5 +153,8 @@ REST_FRAMEWORK = {
     #'PAGE_SIZE': 6,
 
     #filter
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+
+    #auth
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
 }
