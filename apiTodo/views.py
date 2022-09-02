@@ -8,8 +8,14 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 
 #pegination
-from .pagination import SmallPageNumberPegination, LargePageNumberPegination
+from .pagination import SmallPageNumberPagination, LargePageNumberPagination, MyLimitOffsetPagination, MyCursorPagination
 
+#filter
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+
+
+#generic view
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
@@ -174,19 +180,28 @@ class TodoMVS(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
 
-    #pegination
-    pagination_class = LargePageNumberPegination
+    #! pegination
+    
+    #pagination_class = LargePageNumberPagination
 
+    #pagination_class = MyLimitOffsetPagination
 
+    pagination_class = MyCursorPagination
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['priority']
+    filterset_fields = ['priority']
+
+    #ordering
+    ordering_fields = ['task','updateDate']
 
     # filters
-""" @action(methods=['GET'], detail=False)
-    def todo_count(self, request):
-        todo_count = Todo.objects.filter(done=False).count()
-        count = {
-            'undo-todos': todo_count
-        }
-        return Response(count) """
+"""     def get_queryset(self):
+        queryset = Todo.objects.all()
+        priority = self.request.query_params.get('priority')
+        if priority is not None:
+            queryset = queryset.filter(priority=priority)
+        return queryset """
 
 
 # Pegination : verinin yavas yavas sayfaya yüklenmesi durumu.
