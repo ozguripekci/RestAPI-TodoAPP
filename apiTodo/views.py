@@ -30,6 +30,9 @@ from rest_framework.permissions import (
     DjangoModelPermissions,
 )
 
+from .permissions import IsAdminOrReadOnly
+
+
 
 def home(request):
     return HttpResponse(
@@ -193,7 +196,7 @@ class TodoMVS(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
 
     #! Authentication
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAdminOrReadOnly]
 
 
     #! pegination
